@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState, useId } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -11,7 +11,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ label, helperText, error, id, type = "text", leftIcon, className = "", ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
-    const inputId = id || `input-${Math.random().toString(36).substring(2, 9)}`;
+    const reactGeneratedId = useId();
+    const inputId = id || reactGeneratedId;
     const errorId = `${inputId}-error`;
     const helperId = `${inputId}-helper`;
 

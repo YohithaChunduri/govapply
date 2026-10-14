@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React, { useId } from "react";
 import { ChevronDown } from "lucide-react";
 
 interface SelectOption {
@@ -15,7 +15,8 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ label, options, helperText, error, id, className = "", ...props }, ref) => {
-    const selectId = id || `select-${Math.random().toString(36).substring(2, 9)}`;
+    const reactGeneratedId = useId();
+    const selectId = id || reactGeneratedId;
 
     return (
       <div className="w-full text-left">

@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { useJobs } from "../context/JobsContext";
 import { useAuth } from "../context/AuthContext";
 import { useApplications } from "../context/ApplicationContext";
@@ -54,7 +54,7 @@ export const ApplicationBuilderPage: React.FC<ApplicationBuilderPageProps> = ({
   // Step 5: Declaration & Payment Modal
   const [declarationSigned, setDeclarationSigned] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [activeDraft, setActiveDraft] = useState(() => (job ? createDraftForJob(job) : null));
+  const [activeDraft] = useState(() => (job ? createDraftForJob(job) : null));
 
   if (!job || !user) {
     return (

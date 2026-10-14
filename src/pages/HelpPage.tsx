@@ -1,13 +1,11 @@
 ﻿import React, { useState } from "react";
 import {
-  HelpCircle,
   Phone,
   Mail,
   Clock,
   ChevronDown,
   ChevronUp,
   MessageSquare,
-  ShieldCheck,
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "../components/ui/Button";
@@ -16,6 +14,7 @@ import { Input } from "../components/ui/Input";
 export const HelpPage: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [ticketSent, setTicketSent] = useState(false);
+  const [ticketId, setTicketId] = useState("");
   const [queryName, setQueryName] = useState("");
   const [queryEmail, setQueryEmail] = useState("");
   const [queryMsg, setQueryMsg] = useState("");
@@ -50,6 +49,8 @@ export const HelpPage: React.FC = () => {
   const handleTicketSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!queryName || !queryMsg) return;
+    const generatedId = `TK-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+    setTicketId(generatedId);
     setTicketSent(true);
   };
 
@@ -77,13 +78,22 @@ export const HelpPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setOpenIndex(isOpen ? null : idx)}
+                aria-expanded={isOpen}
+                aria-controls={`faq-answer-${idx}`}
                 className="w-full flex items-center justify-between text-left font-bold text-slate-900 text-sm hover:text-[#0B2546] transition-colors cursor-pointer"
               >
                 <span>{faq.q}</span>
-                {isOpen ? <ChevronUp className="w-4 h-4 text-slate-500 shrink-0 ml-2" /> : <ChevronDown className="w-4 h-4 text-slate-500 shrink-0 ml-2" />}
+                {isOpen ? (
+                  <ChevronUp className="w-4 h-4 text-slate-500 shrink-0 ml-2" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 text-slate-500 shrink-0 ml-2" />
+                )}
               </button>
               {isOpen && (
-                <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2 border-t border-slate-100">
+                <p 
+                  id={`faq-answer-${idx}`}
+                  className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed pt-2 border-t border-slate-100"
+                >
                   {faq.a}
                 </p>
               )}
@@ -143,7 +153,7 @@ export const HelpPage: React.FC = () => {
               <CheckCircle2 className="w-8 h-8 text-emerald-700 mx-auto" />
               <h3 className="text-sm font-bold text-slate-900">Query Lodged Successfully</h3>
               <p className="text-xs text-slate-600">
-                Ticket #TK-2026-{Math.floor(1000 + Math.random() * 9000)} created. Our candidate assistance team will reply within 4 business hours.
+                Ticket #{ticketId} created. Our candidate assistance team will reply within 4 business hours.
               </p>
               <Button
                 variant="secondary"
@@ -174,10 +184,14 @@ export const HelpPage: React.FC = () => {
                 required
               />
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
+                <label 
+                  htmlFor="query-msg-input" 
+                  className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1"
+                >
                   Describe Your Query / Issue
                 </label>
                 <textarea
+                  id="query-msg-input"
                   rows={3}
                   value={queryMsg}
                   onChange={(e) => setQueryMsg(e.target.value)}
