@@ -103,9 +103,37 @@ const MainRouter: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
-      <Navbar currentPath={currentPath} onNavigate={navigate} />
-      <main className="flex-1">{renderPage()}</main>
-      <Footer onNavigate={navigate} />
+      {/* 1. Accessibility Skip Link for Keyboard Navigation */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-cyan-600 focus:text-white focus:rounded-md focus:shadow-lg focus:outline-none"
+      >
+        Skip to main content
+      </a>
+
+      {/* 2. Route Announcement for Screen Readers */}
+      <div 
+        aria-live="polite" 
+        aria-atomic="true" 
+        className="sr-only"
+      >
+        Current page: {currentPath === "/" ? "Home" : currentPath.replace("/", "")}
+      </div>
+
+      {/* 3. Header Landmark */}
+      <header role="banner" className="w-full">
+        <Navbar currentPath={currentPath} onNavigate={navigate} />
+      </header>
+
+      {/* 4. Accessible Main Region */}
+      <main id="main-content" role="main" tabIndex={-1} className="flex-1 focus:outline-none">
+        {renderPage()}
+      </main>
+
+      {/* 5. Contentinfo Landmark */}
+      <footer role="contentinfo" className="w-full">
+        <Footer onNavigate={navigate} />
+      </footer>
     </div>
   );
 };
